@@ -7,7 +7,7 @@ Cada pasta representa um projeto individual. Exemplos do que você pode encontra
 - `AutomatizaPDF`: script para conversão e leitura de PDFs.
 - `FilaAtendimento`: app Android para gestão de filas internas.
 
-- 1. Clone o repositório:
+- 1 Clone o repositório:
    ```bash
    git clone https://github.com/AndreyCunh9/My-projects.git
 
