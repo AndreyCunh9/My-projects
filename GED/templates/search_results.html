@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados da Busca</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='search_results.css') }}">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Barra Lateral -->
+        <div class="sidebar">
+            <img src="{{ url_for('static', filename='gptw.jpeg') }}" alt="GPTW" class="sidebar-logo">
+        </div>
+
+        <!-- Conteúdo Principal -->
+        <div class="main-content">
+            <h1>Resultados da Busca</h1>
+            <div class="search-results">
+                {% if documents %}
+                    {% for document in documents %}
+                        <div class="results-item">
+                            <p><strong>Descrição:</strong> {{ document.description }}</p>
+                            <h2>{{ document.title }}</h2>
+                            <p><a href="{{ url_for('download_file', filename=document.filename) }}" class="download-link">Baixar Documento</a></p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>Nenhum documento encontrado.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

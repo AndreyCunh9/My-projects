@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='dashboard.css') }}">
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.main-content').forEach(function(el) {
+                el.style.display = 'none'; // Esconde todas as seções
+            });
+            document.getElementById(sectionId).style.display = 'block'; // Mostra a seção clicada
+        }
+    </script>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="sidebar">
+            <div class="header">
+                <img src="{{ url_for('static', filename='gg.jpeg') }}" alt="Logo GPTW">
+                <h1>GED</h1>
+                <h2>Ginseng</h2>
+            </div>
+            <h3>Setores</h3>
+            {% for sector in sectors %}
+                <div class="sector" onclick="showSection('{{ sector | lower | replace(' ', '-') }}')">{{ sector }}</div>
+            {% endfor %}
+        </div>
+        {% for sector in sectors %}
+            <div class="main-content" id="{{ sector | lower | replace(' ', '-') }}" style="display: none;">
+                <div class="sector-header">
+                    <h2>{{ sector }}</h2>
+                </div>
+                <div class="container">
+                    {% if user.sector == sector or user.is_admin %}
+                        <!-- Bloco de Busca -->
+                        <div class="form-block">
+                            <h3>Buscar Documento</h3>
+                            <form action="{{ url_for('search_documents') }}" method="POST">
+                                <div class="form-group">
+                                    <label for="search_title">Digite o título do documento</label>
+                                    <input type="text" id="search_title" name="search_title" placeholder="Digite o título do documento" required>
+                                </div>
+                                <button type="submit">Buscar</button>
+                            </form>
+                        </div>
+
+                        <!-- Bloco de Upload -->
+                        <div class="form-block">
+                            <h3>Anexar Documento</h3>
+                            <form action="{{ url_for('upload_document') }}" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="document_title">Título do Documento</label>
+                                    <input type="text" id="document_title" name="document_title" placeholder="Título do documento" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="document_file">Arquivo do Documento</label>
+                                    <input type="file" id="document_file" name="document_file" required>
+                                </div>
+                                <input type="hidden" name="sector" value="{{ sector }}">
+                                <button type="submit">Anexar Documento</button>
+                            </form>
+                        </div>
+                    {% else %}
+                        <p>Você não tem permissão para acessar este setor.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        // Mostra a seção do setor do usuário atual ao carregar a página
+        document.addEventListener('DOMContentLoaded', function() {
+    var userSector = '{{ user.sector | lower | replace(' ', '-') }}';
+    console.log('User sector:', userSector);
+    showSection(userSector);
+});
+
+    </script>
+</body>
+</html>
